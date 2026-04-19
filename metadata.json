@@ -1,0 +1,6 @@
+{
+  "name": "Sales Mastery AI",
+  "description": "סימולטור מכירות ומאמן עסקי לסוכני נדל\"ן יוקרה. תרגול סימולציות מול דמויות שונות וניתוח ביצועים אסטרטגי.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": []
+}

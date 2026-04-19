@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-rose-primary: #1a1a1a;
+  --color-rose-accent: #c5a059;
+  --color-rose-bg: #f8f9fa;
+  --color-rose-text: #2d3436;
+  --color-rose-border: #dfe6e9;
+  
+  --color-success: #27ae60;
+  --color-warning: #f39c12;
+  --color-danger: #e74c3c;
+}
+
+@layer base {
+  body {
+    @apply bg-rose-bg text-rose-text font-sans;
+  }
+}
+
+.persona-card {
+  @apply bg-white/5 border border-white/10 p-4 rounded-lg mb-6;
+}
+
+.persona-label {
+  @apply text-[11px] uppercase text-rose-accent mb-2 font-bold tracking-wider;
+}
+
+.section-title {
+  @apply text-lg font-bold mb-4 flex items-center gap-2;
+}
+
+.section-title::before {
+  content: '';
+  @apply w-1 h-4.5 bg-rose-accent inline-block rounded-full;
+}
+
+.score-item {
+  @apply bg-white p-4 rounded-xl shadow-sm border border-rose-border;
+}
+
+.score-val {
+  @apply text-3xl font-extrabold text-rose-primary;
+}
+
+.psych-insight {
+  @apply bg-[#fff9eb] border-r-4 border-warning p-4 text-sm italic mt-5;
+}

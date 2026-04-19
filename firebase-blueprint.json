@@ -1,0 +1,49 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Information about the sales agent",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "avatar": { "type": "string" },
+        "serviceType": { "type": "string" },
+        "packages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "price": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      },
+      "required": ["name", "serviceType"]
+    },
+    "Simulation": {
+      "title": "Simulation Result",
+      "description": "A single roleplay session performance",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "messages": { "type": "array" },
+        "setup": { "type": "object" },
+        "feedback": { "type": "object" }
+      },
+      "required": ["id", "date", "messages", "setup", "feedback"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private profile of the user"
+    },
+    "/users/{userId}/history/{simulationId}": {
+      "schema": "Simulation",
+      "description": "History of simulations for this user"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // Entity Validations
+    function isValidUser(data) {
+      return data.keys().hasAll(['name', 'serviceType']) &&
+             data.name is string && data.name.size() <= 100 &&
+             data.serviceType is string && data.serviceType.size() <= 200 &&
+             (!('avatar' in data) || (data.avatar is string && data.avatar.size() <= 500)) &&
+             (!('packages' in data) || (data.packages is list && data.packages.size() <= 20));
+    }
+
+    function isValidSimulation(data) {
+      return data.keys().hasAll(['id', 'date', 'messages', 'setup', 'feedback']) &&
+             data.id is string && data.id.size() <= 128 &&
+             data.date is string &&
+             data.messages is list &&
+             data.setup is map &&
+             data.feedback is map;
+    }
+
+    // Routes
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidUser(incoming()) && 
+                    incoming().diff(resource.data).affectedKeys().hasOnly(['name', 'serviceType', 'avatar', 'packages']);
+
+      match /history/{simulationId} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidSimulation(incoming());
+        allow delete: if isOwner(userId); // Users can delete their history
+      }
+    }
+  }
+}
